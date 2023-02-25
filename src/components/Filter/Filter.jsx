@@ -1,9 +1,21 @@
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { getFilter } from 'redux/filter/filter-selectors';
+import { setFilter } from 'redux/filter/filter-slice';
+
 import { nanoid } from 'nanoid';
 
 import { StyledLabelFilter, StyledInputFilter } from './Filter.styled';
 
-const Filter = ({ value, onChange }) => {
+const Filter = () => {
+  const filter = useSelector(getFilter);
+
+  const dispatch = useDispatch();
+
+  const handleFilter = ({ target }) => {
+    dispatch(setFilter(target.value));
+  };
+
   const filterId = nanoid();
   return (
     <StyledLabelFilter htmlFor={filterId}>
@@ -11,16 +23,11 @@ const Filter = ({ value, onChange }) => {
       <StyledInputFilter
         id={filterId}
         type="text"
-        value={value}
-        onChange={onChange}
+        value={filter}
+        onChange={handleFilter}
       ></StyledInputFilter>
     </StyledLabelFilter>
   );
-};
-
-Filter.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
 };
 
 export default Filter;
